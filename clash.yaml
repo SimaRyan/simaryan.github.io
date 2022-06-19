@@ -12,6 +12,12 @@ proxies:
     cipher: auto
     tls-hostname: huawei.com
     Host: huawei.com
+proxy-groups:
+  - name: TEST
+    type: url-test
+    proxies: SG
+    url: http://www.gstatic.com/generate_204
+    interval: 1800
 rules:
   - DOMAIN-KEYWORD,github,SG
   - DOMAIN-KEYWORD,youtube,SG
