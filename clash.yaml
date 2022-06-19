@@ -13,22 +13,22 @@ proxies:
     tls-hostname: huawei.com
     Host: huawei.com
 proxy-groups:
-  - name: Test
+  - name: Auto
     type: url-test
     proxies:
       - SG
     url: http://www.gstatic.com/generate_204
     interval: 1800
 rules:
-  - DOMAIN-KEYWORD,github,SG
-  - DOMAIN-KEYWORD,youtube,SG
-  - DOMAIN-KEYWORD,facebook,SG
-  - DOMAIN-KEYWORD,whatsapp,SG
-  - DOMAIN-KEYWORD,google,SG
+  - DOMAIN-KEYWORD,github,Auto
+  - DOMAIN-KEYWORD,youtube,Auto
+  - DOMAIN-KEYWORD,facebook,Auto
+  - DOMAIN-KEYWORD,whatsapp,Auto
+  - DOMAIN-KEYWORD,google,Auto
   - DOMAIN-KEYWORD,huawei,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT
   - IP-CIDR,10.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
   - IP-CIDR,192.168.0.0/16,DIRECT
   - GEOIP,CN,DIRECT
-  - MATCH,SG
+  - MATCH,Auto
