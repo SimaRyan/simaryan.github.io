@@ -1,0 +1,27 @@
+mixed-port: 7890
+allow-lan: false
+external-controller: 127.0.0.1:61198
+secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
+proxies:
+  - name: SG
+    type: vmess
+    server: 3.1.177.11
+    port: 23382
+    uuid: 27a143c9-0b9a-48fa-ac1b-59fb699819bc
+    alterId: 0
+    cipher: auto
+    tls-hostname: huawei.com
+    Host: huawei.com
+rules:
+  - DOMAIN-KEYWORD,github,SG
+  - DOMAIN-KEYWORD,youtube,SG
+  - DOMAIN-KEYWORD,facebook,SG
+  - DOMAIN-KEYWORD,whatsapp,SG
+  - DOMAIN-KEYWORD,google,SG
+  - DOMAIN-KEYWORD,huawei,DIRECT
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,SG
