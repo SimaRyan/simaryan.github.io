@@ -2,6 +2,10 @@ mixed-port: 7890
 allow-lan: false
 external-controller: 127.0.0.1:61198
 secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
+
+# Rule / Global / Direct (默认为 Rule 模式)
+Mode: Rule
+
 proxies:
   - name: SG
     type: vmess
@@ -18,7 +22,7 @@ proxy-groups:
     proxies:
       - SG
     url: http://www.gstatic.com/generate_204
-    interval: 1800
+    interval: 1200
 rules:
   - DOMAIN-KEYWORD,github,Auto
   - DOMAIN-KEYWORD,youtube,Auto
