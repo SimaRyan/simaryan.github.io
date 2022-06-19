@@ -2,7 +2,7 @@ mixed-port: 7890
 allow-lan: false
 external-controller: 127.0.0.1:61198
 secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
-proxy:
+proxies:
   - name: SG
     type: vmess
     server: 3.1.177.11
@@ -13,7 +13,7 @@ proxy:
     tls-hostname: huawei.com
     Host: huawei.com
 proxy-groups:
-  - name: TEST
+  - name: Test
     type: url-test
     proxies:
       - SG
