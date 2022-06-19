@@ -2,7 +2,7 @@ mixed-port: 7890
 allow-lan: false
 external-controller: 127.0.0.1:61198
 secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
-proxies:
+proxy:
   - name: SG
     type: vmess
     server: 3.1.177.11
@@ -16,7 +16,7 @@ proxy-groups:
   - name: TEST
     type: url-test
     proxies:
-        - SG
+      - SG
     url: http://www.gstatic.com/generate_204
     interval: 1800
 rules:
