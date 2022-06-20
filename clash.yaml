@@ -1,4 +1,4 @@
-// http+socks
+# http + socks
 mixed-port: 2222
 allow-lan: false
 external-controller: 127.0.0.1:61198
