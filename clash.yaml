@@ -31,6 +31,7 @@ rules:
   - DOMAIN-KEYWORD,whatsapp,Auto
   - DOMAIN-KEYWORD,google,Auto
   - DOMAIN-KEYWORD,huawei,DIRECT
+  - DOMAIN-SUFFIX,baidu.com,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT
   - IP-CIDR,10.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
