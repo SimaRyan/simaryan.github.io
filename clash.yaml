@@ -25,18 +25,31 @@ proxy-groups:
     url: http://www.gstatic.com/generate_204
     interval: 1200
 rules:
-  - DOMAIN-KEYWORD,github,Auto
-  - DOMAIN-KEYWORD,youtube,Auto
-  - DOMAIN-KEYWORD,facebook,Auto
-  - DOMAIN-KEYWORD,whatsapp,Auto
+# > Google
   - DOMAIN-KEYWORD,google,Auto
-  - DOMAIN-KEYWORD,huawei,DIRECT
+  - DOMAIN-KEYWORD,youtube,Auto
+# > meta
+  - DOMAIN-KEYWORD,facebook,Auto
+  - DOMAIN-KEYWORD,instagram,Auto
+  - DOMAIN-KEYWORD,whatsapp,Auto
+# > Microsoft
+  - DOMAIN-KEYWORD,github,Auto
+  - DOMAIN-KEYWORD,microsoft,Auto
+  - DOMAIN-KEYWORD,live,Auto
+  - DOMAIN-KEYWORD,onedrive,Auto
+
+# > Baidu  
   - DOMAIN-SUFFIX,baidu.com,DIRECT
+  - DOMAIN-SUFFIX,bdstatic.com,DIRECT
+# > Huawei
+  - DOMAIN-KEYWORD,huawei,DIRECT
+  - DOMAIN-KEYWORD,dbankcdn,DIRECT
+# > 360
+  - DOMAIN-SUFFIX,360.cn,DIRECT
+  
   - IP-CIDR,127.0.0.0/8,DIRECT
   - IP-CIDR,10.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
   - IP-CIDR,192.168.0.0/16,DIRECT
-  - DOMAIN-KEYWORD,dbankcdn,DIRECT
-  - DOMAIN-SUFFIX,360.cn,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,Auto
