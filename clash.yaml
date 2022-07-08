@@ -44,6 +44,7 @@ rules:
 # > Huawei
   - DOMAIN-KEYWORD,huawei,DIRECT
   - DOMAIN-KEYWORD,dbankcdn,DIRECT
+  - DOMAIN-KEYWORD,hicloud,DIRECT
 # > 360
   - DOMAIN-SUFFIX,360.cn,DIRECT
   
