@@ -37,6 +37,8 @@ rules:
   - DOMAIN-KEYWORD,microsoft,Auto
   - DOMAIN-KEYWORD,live,Auto
   - DOMAIN-KEYWORD,onedrive,Auto
+  - DOMAIN-KEYWORD,bing,Auto
+  - DOMAIN-KEYWORD,msn,Auto
 # > Amazon
   - DOMAIN-KEYWORD,amazon,Auto
 # > Baidu  
