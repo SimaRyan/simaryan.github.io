@@ -39,6 +39,7 @@ rules:
   - DOMAIN-KEYWORD,onedirve,Auto
   - DOMAIN-KEYWORD,bing,Auto
   - DOMAIN-KEYWORD,msn,Auto
+  - DOMAIN-KEYWORD,windows,Auto
 # > Amazon
   - DOMAIN-KEYWORD,amazon,Auto
 # > Baidu  
