@@ -36,7 +36,7 @@ rules:
   - DOMAIN-KEYWORD,github,Auto
   - DOMAIN-KEYWORD,microsoft,Auto
   - DOMAIN-KEYWORD,live,Auto
-  - DOMAIN-KEYWORD,onedrive,Auto
+  - DOMAIN-KEYWORD,onedirve,Auto
   - DOMAIN-KEYWORD,bing,Auto
   - DOMAIN-KEYWORD,msn,Auto
 # > Amazon
