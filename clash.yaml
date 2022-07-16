@@ -37,6 +37,8 @@ rules:
   - DOMAIN-KEYWORD,microsoft,Auto
   - DOMAIN-KEYWORD,live,Auto
   - DOMAIN-KEYWORD,onedrive,Auto
+# > Amazon
+  - DOMAIN-KEYWORD,amazon,Auto
 # > Baidu  
   - DOMAIN-SUFFIX,baidu.com,DIRECT
   - DOMAIN-SUFFIX,bdstatic.com,DIRECT
