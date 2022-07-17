@@ -28,6 +28,7 @@ rules:
 # > Google
   - DOMAIN-KEYWORD,google,Auto
   - DOMAIN-KEYWORD,youtube,Auto
+  - DOMAIN-SUFFIX,gstatic,Auto
 # > meta
   - DOMAIN-KEYWORD,facebook,Auto
   - DOMAIN-KEYWORD,instagram,Auto
