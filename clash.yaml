@@ -10,9 +10,9 @@ Mode: Rule
 proxies:
   - name: SG
     type: vmess
-    server: 3.1.177.11
+    server: 13.212.34.238
     port: 23382
-    uuid: 27a143c9-0b9a-48fa-ac1b-59fb699819bc
+    uuid: c9c74ea8-e5c6-4abb-a400-209859e5b23b
     alterId: 0
     cipher: auto
     tls-hostname: huawei.com
