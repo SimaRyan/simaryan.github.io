@@ -10,7 +10,7 @@ Mode: Rule
 proxies:
   - name: SG
     type: vmess
-    server: 13.229.200.246
+    server: 13.212.221.118
     port: 23382
     uuid: c9c74ea8-e5c6-4abb-a400-209859e5b23b
     alterId: 0
