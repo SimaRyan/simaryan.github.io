@@ -10,7 +10,7 @@ Mode: Rule
 proxies:
   - name: SG
     type: vmess
-    server: ec2-13-212-221-118.ap-southeast-1.compute.amazonaws.com
+    server: ec2-13-212-172-112.ap-southeast-1.compute.amazonaws.com
     port: 23382
     uuid: c9c74ea8-e5c6-4abb-a400-209859e5b23b
     alterId: 0
@@ -26,8 +26,6 @@ proxy-groups:
     interval: 1200
 rules:
 # > SELF
-#  - DOMAIN,ec2-13-212-221-118.ap-southeast-1.compute.amazonaws.com:22382,DIRECT
-  - SRC-PORT,22382,DIRECT
   - DST-PORT,22382,DIRECT
 # > Google
   - DOMAIN-KEYWORD,google,Auto
