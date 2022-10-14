@@ -10,7 +10,7 @@ Mode: Rule
 proxies:
   - name: SG
     type: vmess
-    server: ec2-13-212-101-117.ap-southeast-1.compute.amazonaws.com
+    server: ec2-13-212-77-225.ap-southeast-1.compute.amazonaws.com
     port: 23382
     uuid: 2798f5ac-75d0-424f-be0c-b111080fb32b
     alterId: 0
