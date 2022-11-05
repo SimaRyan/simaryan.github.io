@@ -21,7 +21,7 @@ proxies:
     type: trojan
     server: shopmall.live
     port: 443
-    password: 210DEcTUNkk9BFaIdCHUp508q9148Cp2
+    password: 1V2E6F8W22cZUR3X62dAXc9H3cDh21eS
     alpn:
       - h2
       - http/1.1
