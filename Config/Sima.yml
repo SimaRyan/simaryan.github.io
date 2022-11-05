@@ -17,10 +17,19 @@ proxies:
     cipher: auto
     tls-hostname: huawei.com
     Host: huawei.com
+  - name: newSG
+    type: trojan
+    server: shopmall.live
+    port: 443
+    password: 210DEcTUNkk9BFaIdCHUp508q9148Cp2
+    alpn:
+      - h2
+      - http/1.1
 proxy-groups:
   - name: Auto
     type: url-test
     proxies:
+      - newSG
       - SG
     url: http://www.gstatic.com/generate_204
     interval: 1200
