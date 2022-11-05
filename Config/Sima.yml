@@ -31,6 +31,9 @@ rules:
   - DOMAIN-KEYWORD,google,Auto
   - DOMAIN-KEYWORD,youtube,Auto
   - DOMAIN-SUFFIX,gstatic.com,Auto
+# > Telegram
+  - DOMAIN-KEYWORD,telegram,Auto
+  - DOMAIN-SUFFIX,t.me,Auto
 # > meta
   - DOMAIN-KEYWORD,facebook,Auto
   - DOMAIN-KEYWORD,instagram,Auto
