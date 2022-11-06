@@ -8,7 +8,7 @@ secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
 Mode: Rule
 
 proxies:
-  - name: default
+  - name: SG
     type: trojan
     server: shopmall.live
     port: 443
@@ -16,6 +16,19 @@ proxies:
     alpn:
       - h2
       - http/1.1
+  - name: SG-WS
+    server: shopmall.live
+    port: 443
+    type: trojan
+    password: 1V2E6F8W22cZUR3X62dAXc9H3cDh21eS
+    network: ws
+    sni: shopmall.live#shopmall.live
+    # skip-cert-verify: true
+    udp: true
+    # ws-opts:
+      # path: /path
+      # headers:
+      #   Host: example.com
 proxy-groups:
   - name: Auto
     type: url-test
