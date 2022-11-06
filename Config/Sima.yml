@@ -17,23 +17,37 @@ proxies:
       - h2
       - http/1.1
   - name: SG-WS
-    server: shopmall.live
+    server: www.shopmall.live
     port: 443
     type: trojan
-    password: 1V2E6F8W22cZUR3X62dAXc9H3cDh21eS
+    password: AofA15SFOd8D0m739epZ5Qf0Z18TweOP
     network: ws
-    sni: shopmall.live#shopmall.live
+    sni: www.shopmall.live
     # skip-cert-verify: true
     udp: true
     # ws-opts:
       # path: /path
       # headers:
       #   Host: example.com
+  - name: SG-TJ-WS
+    type: trojan
+    server: www.shopmall.live
+    port: 443
+    password: AofA15SFOd8D0m739epZ5Qf0Z18TweOP
+    network: ws
+    sni: www.shopmall.live
+    skip-cert-verify: true
+    udp: true
+    ws-opts:
+      path: /give-me-more-money
+      headers:
+        Host: www.shopmall.live
 proxy-groups:
   - name: Auto
     type: url-test
     proxies:
       - SG
+      - SG-TJ-WS
       - SG-WS
     url: http://www.gstatic.com/generate_204
     interval: 1200
