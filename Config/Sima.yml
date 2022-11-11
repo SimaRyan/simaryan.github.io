@@ -13,9 +13,9 @@ proxies:
     server: www.shopmall.live
     port: 443
     password: AofA15SFOd8D0m739epZ5Qf0Z18TweOP
-    # sni: www.shopmall.live
-    # skip-cert-verify: true
-    # udp: true
+    sni: www.shopmall.live
+#     skip-cert-verify: true
+#     udp: true
     alpn:
       - h2
       - http/1.1
