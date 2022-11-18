@@ -21,13 +21,6 @@ proxies:
       path: /give-me-more-money
       headers:
         Host: www.shopmall.live
-  - name: TEST
-    type: vmess
-    server: 45.93.31.142
-    port: 45232
-    alterId: 0
-    uuid: fff16216-0acf-4b97-a32c-cfc8987a442c
-    cipher: auto
 proxy-groups:
   - name: Auto
     type: url-test
@@ -74,9 +67,7 @@ rules:
   - IP-CIDR,10.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
   - IP-CIDR,192.168.0.0/16,DIRECT
-  - IP-CIDR,18.162.98.98/32,TEST
   - DOMAIN-KEYWORD,tokenusdt,DIRECT
-  - DOMAIN-KEYWORD,tronscanapi,TEST
 # > GEOIP
   - GEOIP,CN,DIRECT
   - MATCH,Auto
