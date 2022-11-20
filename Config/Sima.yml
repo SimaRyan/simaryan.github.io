@@ -21,10 +21,19 @@ proxies:
       path: /give-me-more-money
       headers:
         Host: www.shopmall.live
+  - name: V2
+    type: vmess
+    server: 141.164.59.84
+    port: 37743
+    uuid: aa631eac-e6ca-40c2-94f3-184d18e48c34
+    afterId: 0
+    cipher: auto
+    
 proxy-groups:
   - name: Auto
     type: url-test
     proxies:
+      - V2
       - SG-TJ-WS
     url: http://www.gstatic.com/generate_204
     interval: 1200
