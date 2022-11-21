@@ -26,7 +26,7 @@ proxies:
     server: 18.143.156.23
     port: 23382
     uuid: 407a6a6c-f6b8-4346-b0bc-6abdcf1dd809
-    afterId: 0
+    alterId: 0
     cipher: auto
 proxy-groups:
   - name: Auto
