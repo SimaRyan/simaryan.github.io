@@ -1,0 +1,4 @@
+payload:
+  - DOMAIN-KEYWORD,google,Auto
+  - DOMAIN-KEYWORD,youtube,Auto
+  - DOMAIN-SUFFIX,gstatic.com,Auto
