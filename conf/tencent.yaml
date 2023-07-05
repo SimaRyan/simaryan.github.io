@@ -8,6 +8,8 @@
 payload:
   # 自己添加
   - IP-CIDR,43.155.0.0/32
+  - IP-CIDR,162.62.163.63/32
+  - IP-CIDR,43.156.222.0/24
   - PROCESS-NAME,wechat.exe
   - PROCESS-NAME,com.tencent.mm
   - PROCESS-NAME,com.tencent.mobileqq
