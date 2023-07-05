@@ -80,7 +80,7 @@ rule-providers:
     path: ./Rules/zijie.yaml
     interval: 86400
 rules:
-  - RULE-SET,google,A
+  - RULE-SET,google,DIRECT
   - RULE-SET,meta,A
   - RULE-SET,microsoft,DIRECT
   - RULE-SET,netease,A
