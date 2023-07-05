@@ -1,1 +1,38 @@
+# http + socks
+mixed-port: 2222
+allow-lan: false
+external-controller: 127.0.0.1:61198
+secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
 
+# Rule / Global / Direct (默认为 Rule 模式)
+Mode: Rule
+
+proxies:
+  - name: v2ray_default
+    type: vmess
+    server: your server address
+    port: your port
+    uuid: your uuid
+    alterId: 0
+    cipher: auto
+#  - name: trojan_default
+#    type: trojan
+#    server: your server address
+#    port: your port
+#    password: your password
+#    network: ws
+#    sni: your sni
+#    skip-cert-verify: true
+#    udp: true
+#    ws-opts:
+#      path: your path
+#      headers:
+#        host: your host
+proxy-groups:
+  - name: A
+    type: url-test
+    proxies:
+      #- trojan_default
+      - v2ray_default
+    url: http://www.gstatic.com/generate_204
+    interval: 1200
