@@ -78,8 +78,8 @@ rules:
   - RULE-SET,meta,A
   - RULE-SET,microsoft,A
   - RULE-SET,telegram,A
-  - RULE-SET,tencent,A
-  - RULE-SET,zijie,A
+  - RULE-SET,tencent,DIRECT
+  - RULE-SET,zijie,DIRECT
 
   # Self
   - DST-PORT,1688,DIRECT
