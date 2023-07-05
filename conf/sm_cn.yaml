@@ -8,13 +8,13 @@ secret: d555cf84-7e14-4a4b-8bea-6ff3d0b073f2
 Mode: Rule
 
 proxies:
-  - name: v2ray_default
-    type: vmess
-    server: your server address
-    port: 0
-    uuid: 0
-    alterId: 0
-    cipher: auto
+#  - name: v2ray_default
+#    type: vmess
+#    server: your server address
+#    port: 0
+#    uuid: 0
+#    alterId: 0
+#    cipher: auto
 #  - name: trojan_default
 #    type: trojan
 #    server: your server address
