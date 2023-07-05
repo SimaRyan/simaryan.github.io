@@ -12,7 +12,7 @@ proxies:
     type: vmess
     server: your server address
     port: 0
-    uuid: your uuid
+    uuid: 0
     alterId: 0
     cipher: auto
 #  - name: trojan_default
