@@ -55,6 +55,12 @@ rule-providers:
     url: https://simaryan.github.io/conf/microsoft.yaml
     path: ./Rules/microsoft.yaml
     interval: 86400
+  netease:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/netease.yaml
+    path: ./Rules/netease.yaml
+    interval: 86400
   telegram:
     type: http
     behavior: classical
@@ -77,6 +83,7 @@ rules:
   - RULE-SET,google,A
   - RULE-SET,meta,A
   - RULE-SET,microsoft,A
+  - RULE-SET,netease,A
   - RULE-SET,telegram,A
   - RULE-SET,tencent,A
   - RULE-SET,zijie,A
