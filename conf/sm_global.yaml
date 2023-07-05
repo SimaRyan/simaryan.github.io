@@ -36,3 +36,59 @@ proxy-groups:
       - v2ray_default
     url: http://www.gstatic.com/generate_204
     interval: 1200
+rule-providers:
+  google:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/google.yaml
+    path: ./Rules/google.yaml
+    interval: 86400
+  meta:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/meta.yaml
+    path: ./Rules/meta.yaml
+    interval: 86400
+  microsoft:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/microsoft.yaml
+    path: ./Rules/microsoft.yaml
+    interval: 86400
+  telegram:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/telegram.yaml
+    path: ./Rules/telegram.yaml
+    interval: 86400
+  tencent:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/tencent.yaml
+    path: ./Rules/tencent.yaml
+    interval: 86400
+  zijie:
+    type: http
+    behavior: classical
+    url: https://simaryan.github.io/conf/zijie.yaml
+    path: ./Rules/zijie.yaml
+    interval: 86400
+rules:
+  - RULE-SET,google,A
+  - RULE-SET,meta,A
+  - RULE-SET,microsoft,A
+  - RULE-SET,telegram,A
+  - RULE-SET,tencent,A
+  - RULE-SET,zijie,A
+
+  # Self
+  - DST-PORT,1688,DIRECT
+  - IP-CIDR,3.1.108.103,A
+  
+  # Local Area Network
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
