@@ -11,14 +11,14 @@ proxies:
   - name: v2ray_default
     type: vmess
     server: your server address
-    port: your port
+    port: 0
     uuid: your uuid
     alterId: 0
     cipher: auto
 #  - name: trojan_default
 #    type: trojan
 #    server: your server address
-#    port: your port
+#    port: 0
 #    password: your password
 #    network: ws
 #    sni: your sni
