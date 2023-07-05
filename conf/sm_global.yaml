@@ -15,25 +15,25 @@ proxies:
 #    uuid: 0
 #    alterId: 0
 #    cipher: auto
-#  - name: trojan_default
-#    type: trojan
-#    server: your server address
-#    port: 0
-#    password: your password
-#    network: ws
-#    sni: your sni
-#    skip-cert-verify: true
-#    udp: true
-#    ws-opts:
-#      path: your path
-#      headers:
-#        host: your host
+ - name: trojan_default
+   type: trojan
+   server: 0.0.0.0
+   port: 1688
+   password: your password
+   network: ws
+   sni: your sni
+   skip-cert-verify: true
+   udp: true
+   ws-opts:
+     path: /0.0.0.0
+     headers:
+       host: 0.0.0.0
 proxy-groups:
   - name: A
     type: url-test
     proxies:
-      #- trojan_default
-      - v2ray_default
+      - trojan_default
+      # - v2ray_default
     url: http://www.gstatic.com/generate_204
     interval: 1200
 rule-providers:
@@ -80,7 +80,7 @@ rule-providers:
     path: ./Rules/zijie.yaml
     interval: 86400
 rules:
-  - RULE-SET,google,DIRECT
+  - RULE-SET,google,A
   - RULE-SET,meta,A
   - RULE-SET,microsoft,DIRECT
   - RULE-SET,netease,A
