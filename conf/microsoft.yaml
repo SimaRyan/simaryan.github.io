@@ -1,3 +1,4 @@
 # name: Microsoft
 payload:
   - PROCESS-NAME,com.skype.raider
+  - PROCESS-NAME,com.microsoft.rdc.androidx
