@@ -1,9 +1,3 @@
+# name: Microsoft
 payload:
-  - DOMAIN-KEYWORD,github,Auto
-  - DOMAIN-KEYWORD,microsoft,Auto
-  - DOMAIN-KEYWORD,live,Auto
-  - DOMAIN-KEYWORD,onedrive,Auto
-  - DOMAIN-KEYWORD,bing,Auto
-  - DOMAIN-KEYWORD,msn,Auto
-  - DOMAIN-KEYWORD,windows,Auto
-  - DOMAIN-KEYWORD,office,Auto
+  - PROCESS-NAME,com.skype.raider
